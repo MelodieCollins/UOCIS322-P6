@@ -35,7 +35,6 @@
           console.log(jsonCsv)
           $.getJSON((SCRIPT_ROOT+"/listAll"), {top: top, json_or_csv: jsonCsv}).done(function(info)
             {
-              //console.log(info.result);
               document.write(info.result);
             });
         });
@@ -48,7 +47,6 @@
    				console.log(jsonCsv)
    				$.getJSON((SCRIPT_ROOT+"/listOpenOnly"), {top: top, json_or_csv: jsonCsv}).done(function(info)
    					{
-   						//console.log(info.result);
               document.write(info.result);
    					});
    			});
@@ -61,7 +59,6 @@
           console.log(jsonCsv)
           $.getJSON((SCRIPT_ROOT+"/listCloseOnly"), {top: top, json_or_csv: jsonCsv}).done(function(info)
             {
-              //console.log(info.result);
               document.write(info.result);
             });
         });

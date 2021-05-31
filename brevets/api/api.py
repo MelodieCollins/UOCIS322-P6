@@ -13,23 +13,15 @@ api = Api(app)
 client = MongoClient('mongodb://' + os.environ['MONGODB_HOSTNAME'], 27017)
 db = client.tododb
 
-#merged = []
-#for sublist in open_close:
-    #for val in sublist:
-        #merged.append(val)
-# merged = list(itertools.chain.from_iterable(open_close))
-#print(merged)
-
 class listAll(Resource):
-	def get(self, dtype):
+	def get(self, dtype, top):
 		items = list(db.tododb.find())
-		# listAll
 		open_close = []
 		for i in items:
 			tmp = [str(i['open']), str(i['close'])]
 			open_close.append(tmp)
 
-		topk = request.args.get('top', default=-1)
+		topk = top
 		if dtype == 'CSV':
 			# open_close is a list of lists (make into list? ->merged)
 			return open_close
@@ -40,7 +32,7 @@ class listAll(Resource):
 		return y
 
 class listOpenOnly(Resource):
-	def get(self, dtype):
+	def get(self, dtype, top):
 		items = list(db.tododb.find())
 		#openlist = []
 		#for i in items:
@@ -49,25 +41,24 @@ class listOpenOnly(Resource):
 		open_only = ",".join(res_open) + "\n"
 		open_only = open_only[:-1]
 
-		topk = request.args.get('top', default=-1)
+		topk = top
 		if dtype == 'CSV':
-			return openlist
+			return open_only
 		# return json format
 		x = {
-			"List Open Only": openlist
+			"List Open Only": open_only
 		}
 		y = json.dumps(x)
 		return y
 
 class listCloseOnly(Resource):
-	def get(self, dtype):
+	def get(self, dtype, top):
 		items = list(db.tododb.find())
-		# listCloseOnly
 		res_close = [ sub['close'] for sub in items ]
 		close_only = ",".join(res_close) + "\n"
 		close_only = close_only[:-1]
 
-		topk = request.args.get('top', default=-1)
+		topk = top
 		if dtype == 'CSV':
 			return close_only
 		x = {
@@ -76,12 +67,9 @@ class listCloseOnly(Resource):
 		y = json.dumps(x)
 		return y
 
-# Create routes
-# Another way, without decorators
-api.add_resource(listAll, '/listAll/<dtype>')
-api.add_resource(listOpenOnly, '/listOpenOnly/<dtype>')
-api.add_resource(listCloseOnly, '/listCloseOnly/<dtype>')
+api.add_resource(listAll, '/listAll/<dtype><top>')
+api.add_resource(listOpenOnly, '/listOpenOnly/<dtype><top>')
+api.add_resource(listCloseOnly, '/listCloseOnly/<dtype><top>')
 
-# Run the application
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', debug=True)
