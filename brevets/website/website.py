@@ -20,25 +20,25 @@ def home():
 
 @app.route('/listAll')
 def listAll():
-	dtype = request.args.get('json_or_csv', default='JSON')
+	dtype = request.args.get('json_or_csv', default='json')
 	top = request.args.get('top', default=-1)
-	r = requests.get('http://restapi:5000/listAll/' + dtype + top)
+	r = requests.get('http://restapi:5000/listAll/' + dtype)
 	return flask.jsonify({"result": r.text})
 
 @app.route('/listOpenOnly')
 def listOpenOnly():
 	#get json_or_csv
-	dtype = request.args.get('json_or_csv', default='JSON')
+	dtype = request.args.get('json_or_csv', default='json')
 	top = request.args.get('top', default=-1)
-	r = requests.get('http://restapi:5000/listOpenOnly/' + dtype + top)
+	r = requests.get('http://restapi:5000/listOpenOnly/' + dtype)
 	app.logger.debug(r)
 	return flask.jsonify({"result": r.text})
 
 @app.route('/listCloseOnly')
 def listCloseOnly():
-	dtype = request.args.get('json_or_csv', default='JSON')
+	dtype = request.args.get('json_or_csv', default='json')
 	top = request.args.get('top', default=-1)
-	r = requests.get('http://restapi:5000/listCloseOnly/' + dtype + top)
+	r = requests.get('http://restapi:5000/listCloseOnly/' + dtype)
 	return flask.jsonify({"result": r.text})
 
 if __name__ == '__main__':
