@@ -6,6 +6,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from pymongo import MongoClient
 import json
+#from string import letters, digits
 
 app = Flask(__name__)
 api = Api(app)
@@ -63,10 +64,10 @@ class listCloseOnly(Resource):
 	def get(self, dtype='json'):
 		items = list(db.tododb.find())
 		top = int(request.args.get('top', default='-1').strip())
-		
 		#closelist = []
 		#for i in items:
 			#closelist.append(str(i['close']))
+		#ascending = sorted(closelist, key=alphanumeric_key)
 
 		close_only = []
 		app.logger.debug(top)
