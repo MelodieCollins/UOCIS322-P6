@@ -16,30 +16,50 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def home():
-	return render_template('index.html')
+    return render_template('index.html')
 
 @app.route('/listAll')
 def listAll():
-	dtype = request.args.get('json_or_csv', default='json')
-	top = request.args.get('top', default=-1)
-	r = requests.get('http://restapi:5000/listAll/' + dtype)
-	return flask.jsonify({"result": r.text})
+    dtype = request.args.get('json_or_csv', default='json')
+    top = request.args.get('top').strip()
+    url = 'http://restapi:5000/listAll/' + dtype
+    if top != "":
+        try:
+            top=int(top)
+        except ValueError as verr:
+            abort(400, str(verr))
+        url += f"?top={top}"
+    r = requests.get(url)
+    return flask.jsonify({"result": r.text})
 
 @app.route('/listOpenOnly')
 def listOpenOnly():
-	#get json_or_csv
-	dtype = request.args.get('json_or_csv', default='json')
-	top = request.args.get('top', default=-1)
-	r = requests.get('http://restapi:5000/listOpenOnly/' + dtype)
-	app.logger.debug(r)
-	return flask.jsonify({"result": r.text})
+    dtype = request.args.get('json_or_csv', default='json')
+    top = request.args.get('top').strip()
+    url = 'http://restapi:5000/listOpenOnly/' + dtype
+    if top != "":
+        try:
+            top=int(top)
+        except ValueError as verr:
+            abort(400, str(verr))
+        url += f"?top={top}"
+    r = requests.get(url)
+    app.logger.debug(r)
+    return flask.jsonify({"result": r.text})
 
 @app.route('/listCloseOnly')
 def listCloseOnly():
-	dtype = request.args.get('json_or_csv', default='json')
-	top = request.args.get('top', default=-1)
-	r = requests.get('http://restapi:5000/listCloseOnly/' + dtype)
-	return flask.jsonify({"result": r.text})
+    dtype = request.args.get('json_or_csv', default='json')
+    top = request.args.get('top').strip()
+    url = 'http://restapi:5000/listCloseOnly/' + dtype
+    if top != "":
+        try:
+            top=int(top)
+        except ValueError as verr:
+            abort(400, str(verr))
+        url += f"?top={top}"
+    r = requests.get(url)
+    return flask.jsonify({"result": r.text})
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True)

@@ -16,14 +16,13 @@ db = client.tododb
 class listAll(Resource):
 	def get(self, dtype='json'):
 		items = list(db.tododb.find())
-		#topk = top
+		top = int(request.args.get('top', default='-1').strip())
 		open_close = []
 		for i in items:
 			tmp = [str(i['open']), str(i['close'])]
 			open_close.append(tmp)
 
 		if dtype == 'csv':
-			# open_close is a list of lists (make into list? ->merged)
 			return open_close
 		x = {
 			"List All": open_close
@@ -34,21 +33,19 @@ class listAll(Resource):
 class listOpenOnly(Resource):
 	def get(self, dtype='json'):
 		items = list(db.tododb.find())
-		#topk = top
-		#openlist = []
-		#if topk != -1:
-		#	for i in items:
-		#		if len(openlist) <= int(topk):
-		#			openlist.append(str(i['open']))
-		#else:
-		#	for i in items:
-		#		openlist.append(str(i['open']))
-		res_open = [ sub['open'] for sub in items ]
-		open_only = ",".join(res_open) + "\n"
-		open_only = open_only[:-1]
+		top = int(request.args.get('top', default='-1').strip())
+		open_only = []
+		app.logger.debug(top)
+		if top != -1:
+			for i in items:
+				if len(open_only) < int(top):
+					open_only.append(str(i['open']))
+		else:
+			for i in items:
+				open_only.append(str(i['open']))
+
 		if dtype == 'csv':
 			return open_only
-		# return json format
 		x = {
 			"List Open Only": open_only
 		}
@@ -58,10 +55,16 @@ class listOpenOnly(Resource):
 class listCloseOnly(Resource):
 	def get(self, dtype='json'):
 		items = list(db.tododb.find())
-		#topk = top
-		res_close = [ sub['close'] for sub in items ]
-		close_only = ",".join(res_close) + "\n"
-		close_only = close_only[:-1]
+		top = int(request.args.get('top', default='-1').strip())
+		close_only = []
+		app.logger.debug(top)
+		if top != -1:
+			for i in items:
+				if len(close_only) < int(top):
+					close_only.append(str(i['open']))
+		else:
+			for i in items:
+				close_only.append(str(i['open']))
 
 		if dtype == 'csv':
 			return close_only

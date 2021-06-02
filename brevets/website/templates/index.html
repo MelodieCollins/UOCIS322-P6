@@ -29,8 +29,8 @@
       $("#listAll").click(
         function(e){
           console.log("List All clicked!");
-          var top = document.getElementById('top').value
-          console.log(top)
+          var top = $("input[name='top']").val();
+          //console.log("top: ", top)
           var jsonCsv = document.getElementById('json_or_csv').value
           console.log(jsonCsv)
           $.getJSON((SCRIPT_ROOT+"/listAll"), {top: top, json_or_csv: jsonCsv}).done(function(info)
@@ -41,7 +41,7 @@
    		$("#listOpenOnly").click(
    			function(e){
    				console.log("List Open Only clicked!");
-   				var top = document.getElementById('top').value
+   				var top = $("input[name='top']").val();
    				console.log(top)
    				var jsonCsv = document.getElementById('json_or_csv').value
    				console.log(jsonCsv)
@@ -53,7 +53,7 @@
       $("#listCloseOnly").click(
         function(e){
           console.log("List Close Only clicked!");
-          var top = document.getElementById('top').value
+          var top = $("input[name='top']").val();
           console.log(top)
           var jsonCsv = document.getElementById('json_or_csv').value
           console.log(jsonCsv)
